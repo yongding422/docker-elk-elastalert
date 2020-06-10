@@ -1,0 +1,13 @@
+name: Email rule
+type: frequency
+index: heartbeat-*
+num_events: 10
+timeframe:
+    minutes: 5
+filter:
+- term:
+    monitor.status: "down"
+alert:
+- "email"
+email:
+- "yding2018@fau.edu"

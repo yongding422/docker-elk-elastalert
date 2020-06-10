@@ -1,0 +1,23 @@
+heartbeat.monitors:
+- type: http
+  name: "FAU Senser Monitor"
+  schedule: '@every 20s'
+  urls:
+    - http://portal-isense-dev.fau.edu:8080/madis/data/CC-ECONet.csv
+  response.include_body: always
+output.elasticsearch:
+  hosts: 'host.docker.internal:9200'
+setup.kibana:
+  hosts: 'host.docker.internal:5601'
+
+processors:
+  - add_observer_metadata:
+      cache.ttl: 5m
+      geo:
+        name: fau-monitor-1
+        location: 26.34901, -80.14099
+        continent_name: North America
+        country_iso_code: US
+        region_name: Florida
+        region_iso_code: FL
+        city_name: Boca Raton

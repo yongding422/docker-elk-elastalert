@@ -1,23 +1,13 @@
-FROM alpine
+FROM rdrg/elastalert-docker
+ENV RULES_DIRECTORY /opt/rules
+ENV CONFIG_DIR /opt/config
 
-ENV \
-  BUILD_DEPS="gcc musl-dev python2-dev musl-dev gcc openssl-dev libffi-dev openssl-dev" \
-  ELASTALERT_DIR=/opt/elastalert \
-  ELASTALERT_CONFIG=/opt/elastalert/config.yaml \
-  ELASTALERT_INDEX=elastalert_status
+COPY config/elastalert_config.yaml ${CONFIG_DIR}
+COPY config/elastalert_supervisord.conf ${CONFIG_DIR}
+COPY rules/emailrule.yaml ${RULES_DIRECTORY}
 
-RUN apk add --no-cache ca-certificates openssl python2 py2-pip
-RUN apk add --no-cache $BUILD_DEPS
-
-RUN pip install elastalert
-
-RUN \
-  apk del $BUILD_DEPS && \
-  rm -rf /var/cache/apk/*
-
-COPY ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-
-WORKDIR $ELASTALERT_DIR
-
-ENTRYPOINT /entrypoint.sh
+FROM docker.elastic.co/beats/heartbeat:7.7.1
+COPY config/heartbeat.yml /usr/share/heartbeat/heartbeat.yml
+USER root
+RUN chown root:heartbeat /usr/share/heartbeat/heartbeat.yml
+USER heartbeat
