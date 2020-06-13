@@ -1,0 +1,9 @@
+version: 1
+task_definition:
+  services:
+    elk:
+        cpu_shares: 80
+        mem_limit: 524288000
+    heartbeat:
+        cpu_shares: 20
+        mem_limit: 524288000

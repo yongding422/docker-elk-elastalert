@@ -1,6 +1,6 @@
 # This is the folder that contains the rule yaml files
 # Any .yaml file will be loaded as a rule
-rules_folder: /opt/rules
+rules_folder: /opt/elastalert/rules
 
 # In order to prevent error "rule duplicated"
 scan_subdirectories: false
@@ -64,4 +64,4 @@ writeback_index: elastalert_status
 # If an alert fails for some reason, ElastAlert will retry
 # sending the alert until this time period has elapsed
 alert_time_limit:
-  days: 2
+  days: 5
